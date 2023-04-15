@@ -38,36 +38,29 @@ function FeedbackForm() {
     }
 
     const handleSubmit = (e)=>{
-        if(text.trim().length > 10){
-            const newFeedback = {
-                text,
-                rating
-            }
+        e.preventDefault()
+        if (text.trim().length > 10) {
+          const newFeedback = {
+            text,
+            rating,
+          }
+    
+          if (feedbackEdit.edit === true) {
+            updateFeedback(feedbackEdit.item.id, newFeedback)
+          } else {
             addFeedback(newFeedback)
-            setText('')
-
+          }
+    
+          // NOTE: reset to default state after submission
+          setBtnDisabled(true) // 👈  add this line to reset disabled
+          setRating(10) //👈 add this line to set rating back to 10
+          setText('')
         }
-
-        e.preventDefault()
-    }
-
-    const handleUpdate = (e)=>{
-        if(text.trim().length > 10){
-            const newFeedback = {
-                id:feedbackEdit.item.id,
-                text,
-                rating
-            }          
-            updateFeedback(feedbackEdit.item.id,newFeedback)
-            setText('')
-        }
-
-        e.preventDefault()
     }
 
   return (
     <Card>
-        <form onSubmit={(feedbackEdit) ? handleUpdate : handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <h2>How would you rate us?</h2>
             <RatingSelect select={setRating} selected={rating} />
             <div className="input-group">
